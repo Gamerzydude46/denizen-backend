@@ -1,16 +1,27 @@
 import express from "express";
+import cors from "cors";
+import * as dotenv from "dotenv";
+import { connectToDatabase } from "./services/database.services";
+import { userRouter } from "./controller/user";
+import bodyParser from "body-parser";
 
 const app = express();
 const port = 8080; // default port to listen
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(express.json());
+app.use(
+    cors({
+        origin: "http://localhost:3000",
+        methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
+        credentials: true,
+    }),
+);
+dotenv.config();
 
-// ** TODO ** Replace this code with a call to your games router class to handle all calls to /games endpoint
-app.get("/", (req, res) => {
-    res.send("Hello world!");
-});
-
-// start the Express server
-app.listen(port, () => {
-    console.log(`server started at http://localhost:${port}`);
-
-    // ** TODO ** Call to Game Service to initiate connection
+connectToDatabase().then(() => {
+    app.use("/user", userRouter);
+    app.listen(port, () => {
+        console.log(`server started at http://localhost:${port}`);
+    });
 });

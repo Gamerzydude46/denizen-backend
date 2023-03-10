@@ -1,6 +1,6 @@
 import * as mongoDB from "mongodb";
 import User from "../models/user";
-import { DenizenCollections, DenizenDatabase } from "custom";
+import {  DenizenDatabase } from "custom";
 import { initDb } from "./dbInit.services";
 
 export var denizenDb: DenizenDatabase = {};

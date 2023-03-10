@@ -1,6 +1,6 @@
-import {Request, Response, Router} from "express";
+import { Request, Response, Router } from "express";
 import User from "../models/user";
-import { createUser } from "../services/user.services";
+import { checkUserExistence, createUser } from "../services/user.services";
 import { denizenDb } from "../services/database.services";
 
 export const userRouter = Router();
@@ -28,17 +28,15 @@ userRouter.post("/create", async (req: Request, res: Response) => {
     }
 
     // Check already exist
-    var flag = denizenDb.collections.user.find({ 'email' : { '$exists' : true }})
-
-    if(flag === null){
+    var flag = await checkUserExistence(user.email);
+    if (flag === undefined) {
         const userCreation = await createUser(user);
+        !userCreation ?
+            res.status(500).json({ message: "Error while creating user" }) :
+            res.status(200).json({ message: "User created" })
+    }
+    else {
+        res.status(200).json({ message: "User exist !!"})
+    }
 
-    !userCreation ?
-        res.status(500).json({message: "Error while creating user"}) :
-        res.status(200).json({message: "User created"})
-    }
-    else{
-            res.status(200).json({message: "User exist !!"})
-    }
-    
 })

@@ -4,6 +4,7 @@ import * as dotenv from "dotenv";
 import { connectToDatabase } from "./services/database.services";
 import { userRouter } from "./controller/user";
 import bodyParser from "body-parser";
+const bcrypt = require('bcrypt');
 
 const app = express();
 const port = 8080; // default port to listen
@@ -12,7 +13,7 @@ app.use(bodyParser.json());
 app.use(express.json());
 app.use(
     cors({
-        origin: "http://localhost:3000",
+        origin: "http://localhost:8080",
         methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
         credentials: true,
     }),

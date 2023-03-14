@@ -10,7 +10,7 @@ export const initDb = async () => {
         })
         .catch((err) => {
             console.log(
-                "Collection " + process.env.USER_COLLECTION_NAME + " already exist, skipping schema validation. ",
+                "Collection < " + process.env.USER_COLLECTION_NAME + " > already exist, skipping schema validation. ",
             );
         }); // Change
 };

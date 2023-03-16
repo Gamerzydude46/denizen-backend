@@ -2,6 +2,9 @@ import { denizenDb } from "../services/database.services";
 import {ObjectId} from "mongodb";
 
 export default class User {
+    static findOne(arg0: { email: any; }) {
+        throw new Error("Method not implemented.");
+    }
     static find(arg0: { email: { $exists: boolean; }; }) {
         throw new Error("Method not implemented.");
     }

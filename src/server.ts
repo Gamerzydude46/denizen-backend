@@ -3,6 +3,7 @@ import cors from "cors";
 import * as dotenv from "dotenv";
 import { connectToDatabase } from "./services/database.services";
 import { userRouter } from "./controller/user";
+import { sellerRouter } from "./controller/seller";
 import bodyParser from "body-parser";
 import session from "express-session";
 import MongoDBStore from "connect-mongodb-session";
@@ -42,6 +43,7 @@ dotenv.config();
 
 connectToDatabase().then(() => {
     app.use("/user", userRouter);
+    app.use("/seller", sellerRouter);
     app.listen(port, () => {
         console.log(`server started at http://localhost:${port}`);
     });

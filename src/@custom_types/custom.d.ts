@@ -1,8 +1,11 @@
 import * as mongoDB from "mongodb";
 import User from "../models/user";
+import Seller from "../models/seller";
+
 
 type DenizenCollections = {
     user?: mongoDB.Collection<User>;
+    seller?: mongoDB.Collection<Seller>;
 };
 
 type DenizenDatabase = {

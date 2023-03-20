@@ -1,9 +1,11 @@
 import { Request, Response, Router } from "express";
+import nodemailer from 'nodemailer';
 import User from "../models/user";
 import { checkUserExistence, createUser } from "../services/user.services";
 import { denizenDb } from "../services/database.services";
 const bcrypt = require('bcrypt');
 export const userRouter = Router();
+
 
 userRouter.post("/create", async (req: Request, res: Response) => {
     const user: User = {
@@ -33,10 +35,10 @@ userRouter.post("/create", async (req: Request, res: Response) => {
         const userCreation = await createUser(user);
         !userCreation ?
             res.status(500).json({ message: "Error while creating user" }) :
-            res.status(200).json({ message: "User account created Succesfully !",flag:true})
+            res.status(200).json({ message: "User account created Succesfully !", flag: true })
     }
     else {
-        res.status(200).json({ message: "User alredy exist go back and login !",flag:false})
+        res.status(200).json({ message: "User alredy exist go back and login !", flag: false })
     }
 
 })
@@ -47,10 +49,10 @@ userRouter.post("/login", async (req: Request, res: Response) => {
         const user = await denizenDb.collections.user.findOne({ email: req.body.email });
         var flag;
         console.log(user);
-        if(user === null){
+        if (user === null) {
             flag = false
         }
-        else{
+        else {
             flag = true
         }
         if (flag) {
@@ -63,18 +65,90 @@ userRouter.post("/login", async (req: Request, res: Response) => {
                     userId: user._id
                 };
 
-                res.json({message:"Authentication Successful"});
+                res.json({ message: "Authentication Successful" });
             } else {
-                res.json({message:"Incorrect password !"});
+                res.json({ message: "Incorrect password !", flag });
             }
         } else {
-            res.json({message:"Incorrect email address !"});
+            res.json({ message: "Invalid email address !", flag },);
         }
     } catch (error) {
         console.log(error);
         res.status(500).send("Internal Server error Occured");
     }
 });
+
+
+userRouter.post("/otp", async (req: Request, res: Response) => {
+    try {
+        const email = req.body.email;
+
+        var otp: number = Math.random();
+        otp = otp * 10000;
+        otp= Math.round(otp);
+        console.log(otp);
+
+            // create reusable transporter object using the default SMTP transport
+        let transporter = nodemailer.createTransport({
+            host: "smtp.gmail.com",
+            port: 465,
+            secure: true,
+            service: 'Gmail',
+
+            auth: {
+                user: process.env.MAIL_USERNAME,
+                pass: process.env.MAIL_PASSWORD,
+            }
+        });
+
+            // send mail with defined transport object
+            let info = await transporter.sendMail({
+                from: '"Team Denizen"<process.env.MAIL_USERNAME>', // sender address
+                to: email, // list of receivers
+                subject: "OTP VERIFICATION", // Subject line
+                text: "TEAM DENIZEB", // plain text body
+                html: "<h3 style=' text-align: center;font-weight:bold;'>OTP for Password Reset</h3>" + "<h1 style='font-weight:bold;text-align: center;'>" + otp + "</h1> <h1 style=' text-align: center'>Thanks, Team Denizen</h1>", // html body
+            });
+
+            console.log("Message sent: %s", info.messageId);
+            // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com
+            // Preview only available when sending through an Ethereal account
+            //console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+            // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+
+        res.status(200).json({ message: 'OTP sended successfully !',key:otp,id: info.messageId })
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("Internal Server error Occured");
+    }
+});
+
+userRouter.post("/password-reset", async (req: Request, res: Response) => {
+    try {
+        const password = await bcrypt.hash(req.body.password, 8);
+        const user = await denizenDb.collections.user.findOne({ email: req.body.email });
+        var flag;
+
+        if (user === null) {
+            flag = false
+        }
+        else {
+            flag = true
+        }
+
+        if (flag) {
+            denizenDb.collections.user.updateOne({"_id": user._id}, { $set:{"password": password}});
+            res.json({ message: "Password reset successfull !",flag});
+        } else {
+            res.json({ message: "Invalid email address !", flag });
+        }
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("Internal Server error Occured");
+    }
+})
 
 userRouter.post("/logout", async (req: Request, res: Response) => {
     try {

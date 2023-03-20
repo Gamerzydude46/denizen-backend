@@ -23,12 +23,12 @@ app.use(bodyParser.json());
 app.use(express.json());
 app.use(
     cors({
-        origin: "http://localhost:3001",
+        origin: "http://localhost:3000",
         methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
         credentials: true,
     }),
 );
-console.log(process.env.SECRET)
+
 app.use(
     session({
         resave: false,

@@ -48,7 +48,6 @@ userRouter.post("/login", async (req: Request, res: Response) => {
     try {
         const user = await denizenDb.collections.user.findOne({ email: req.body.email });
         var flag;
-        console.log(user);
         if (user === null) {
             flag = false
         }
@@ -79,6 +78,29 @@ userRouter.post("/login", async (req: Request, res: Response) => {
 });
 
 
+userRouter.post("/email", async (req: Request, res: Response) => {
+    try {
+        const user = await denizenDb.collections.user.findOne({ email: req.body.email });
+        var flag;
+        if (user === null) {
+            flag = false
+        }
+        else {
+            flag = true
+        }
+        if (flag) {
+            res.json({ message: "Email address Authentic!", flag },);
+        } else {
+            res.json({ message: "Invalid email address !", flag },);
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("Internal Server error Occured");
+    }
+});
+
+
+
 userRouter.post("/otp", async (req: Request, res: Response) => {
     try {
         const email = req.body.email;
@@ -106,7 +128,7 @@ userRouter.post("/otp", async (req: Request, res: Response) => {
                 from: '"Team Denizen"<process.env.MAIL_USERNAME>', // sender address
                 to: email, // list of receivers
                 subject: "OTP VERIFICATION", // Subject line
-                text: "TEAM DENIZEB", // plain text body
+                text: "TEAM DENIZEN", // plain text body
                 html: "<h3 style=' text-align: center;font-weight:bold;'>OTP for Password Reset</h3>" + "<h1 style='font-weight:bold;text-align: center;'>" + otp + "</h1> <h1 style=' text-align: center'>Thanks, Team Denizen</h1>", // html body
             });
 

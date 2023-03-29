@@ -108,7 +108,6 @@ userRouter.post("/otp", async (req: Request, res: Response) => {
         var otp: number = Math.random();
         otp = otp * 10000;
         otp= Math.round(otp);
-        console.log(otp);
 
             // create reusable transporter object using the default SMTP transport
         let transporter = nodemailer.createTransport({
@@ -183,4 +182,8 @@ userRouter.post("/logout", async (req: Request, res: Response) => {
         console.log(error);
         res.status(500).send("Internal Server error Occured");
     }
+})
+
+userRouter.get("/auth", async (req: Request, res: Response) => {
+    res.status(200).json(req.session.userData)
 })

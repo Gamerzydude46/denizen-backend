@@ -31,11 +31,13 @@ export const checkSellerExistence = async (ref_email: string): null | Promise<Wi
 
 export const updateSellerDetails = async (newData: {
     business_name: string, business_address: {
-        city: string,
-        contact: number,
-        email: string,
-        residence: string,
-        district: string
+        residence: string;
+        district: string;
+        latitude: string,
+        longitude: string,
+        city: string;
+        email: string;
+        contact: number;
     }
 }, userData: DenizenUserSession): null | Promise<ObjectId> => {
     const updatedDocument = await denizenDb.collections.seller.updateOne({ ref_email: userData.email }, { $set: { business_name: newData.business_name, business_address: newData.business_address  } })

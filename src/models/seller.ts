@@ -54,6 +54,14 @@ export const sellerSchemaValidation = async () => {
                                 bsonType: ["string", "null"],
                                 description: "district is of type string, and is required",
                             },
+                            latitude: {
+                                bsonType: "number",
+                                description: "latitude from postItems collection of type string and is required",
+                            },
+                            longitude: {
+                                bsonType: "number",
+                                description: "longitude from postItems collection of type string and is required",
+                            },
                             city: {
                                 bsonType: ["string", "null"],
                                 description: "city is of type string, and is required",

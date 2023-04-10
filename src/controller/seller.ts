@@ -14,6 +14,8 @@ sellerRouter.post("/create", async (req: Request, res: Response) => {
         business_address: {
             city: null,
             contact: null,
+            latitude: null,
+            longitude: null,
             email: null,
             residence: null,
             district: null

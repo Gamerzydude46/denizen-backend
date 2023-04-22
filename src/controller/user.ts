@@ -185,5 +185,8 @@ userRouter.post("/logout", async (req: Request, res: Response) => {
 })
 
 userRouter.get("/auth", async (req: Request, res: Response) => {
-    res.status(200).json(req.session.userData)
+    const cookie = req.session.userData
+    const error = "ihvhjfgchjfgcjhfg"
+ 
+    res.status(200).json({msg:cookie})
 })

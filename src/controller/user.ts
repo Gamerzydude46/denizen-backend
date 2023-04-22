@@ -174,13 +174,11 @@ userRouter.post("/password-reset", async (req: Request, res: Response) => {
 userRouter.post("/logout", async (req: Request, res: Response) => {
     var flag = false;
     try {
-        req.session.userData = {
-            email: null,
-            userId: null,
-            loggedIn: false,
-        }
-
-        req.session.destroy
+        console.log("logout session");
+        console.log(req.session);
+        await req.session.destroy(err => {
+            console.log("Session Terminated !");
+        })
         flag = true ;
         res.json({message:"User Logged out !",flag});
     } catch (error) {
@@ -191,7 +189,28 @@ userRouter.post("/logout", async (req: Request, res: Response) => {
 })
 
 userRouter.get("/auth", async (req: Request, res: Response) => {
-    
+
+    try{
         var authData =  req.session.userData;
         res.json({message:"User Session:",authData});
+    }catch(error){
+        console.log(error);
+        res.status(500).send("Internal Session error Occured !");
+    }
+        
+})
+
+userRouter.get("/userData", async (req: Request, res: Response) => {
+
+    try{
+        const userData = await denizenDb.collections.user.findOne({ email: req.session.userData.email });
+    
+        !userData ?
+            res.status(500).json({ message: "Error while getting seller" }) :
+            res.status(200).json({ message: "Seller located....", data: userData })
+    }catch(error){
+        console.log(error);
+        res.status(500).send("Internal Session error Occured !");
+    }
+    
 })

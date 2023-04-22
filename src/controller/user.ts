@@ -172,21 +172,26 @@ userRouter.post("/password-reset", async (req: Request, res: Response) => {
 })
 
 userRouter.post("/logout", async (req: Request, res: Response) => {
+    var flag = false;
     try {
         req.session.userData = {
             email: null,
             userId: null,
             loggedIn: false,
         }
+
+        req.session.destroy
+        flag = true ;
+        res.json({message:"User Logged out !",flag});
     } catch (error) {
         console.log(error);
-        res.status(500).send("Internal Server error Occured");
+        res.json({message:"Internal Server error Occured !",flag});
+        res.status(500).send("Internal Server error Occured !");
     }
 })
 
 userRouter.get("/auth", async (req: Request, res: Response) => {
-    const cookie = req.session.userData
-    const error = "ihvhjfgchjfgcjhfg"
- 
-    res.status(200).json({msg:cookie})
+    
+        var authData =  req.session.userData;
+        res.json({message:"User Session:",authData});
 })

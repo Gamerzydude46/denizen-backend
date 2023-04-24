@@ -1,12 +1,12 @@
 import { Request, Response, Router } from "express";
 import nodemailer from 'nodemailer';
 import User from "../models/user";
-import { checkUserExistence, createUser } from "../services/user.services";
+import { checkUserExistence, createUser ,updateUserDetails } from "../services/user.services";
 import { denizenDb } from "../services/database.services";
 const bcrypt = require('bcrypt');
 export const userRouter = Router();
 
-
+//create new user collection route
 userRouter.post("/create", async (req: Request, res: Response) => {
     const user: User = {
         verified: false,
@@ -43,7 +43,7 @@ userRouter.post("/create", async (req: Request, res: Response) => {
 
 })
 
-
+//login route
 userRouter.post("/login", async (req: Request, res: Response) => {
     try {
         const user = await denizenDb.collections.user.findOne({ email: req.body.email });
@@ -77,7 +77,7 @@ userRouter.post("/login", async (req: Request, res: Response) => {
     }
 });
 
-
+//email chek route
 userRouter.post("/email", async (req: Request, res: Response) => {
     try {
         const user = await denizenDb.collections.user.findOne({ email: req.body.email });
@@ -99,8 +99,7 @@ userRouter.post("/email", async (req: Request, res: Response) => {
     }
 });
 
-
-
+//otp request route
 userRouter.post("/otp", async (req: Request, res: Response) => {
     try {
         const email = req.body.email;
@@ -145,6 +144,7 @@ userRouter.post("/otp", async (req: Request, res: Response) => {
     }
 });
 
+//password reset route
 userRouter.post("/password-reset", async (req: Request, res: Response) => {
     try {
         const password = await bcrypt.hash(req.body.password, 8);
@@ -171,6 +171,7 @@ userRouter.post("/password-reset", async (req: Request, res: Response) => {
     }
 })
 
+//logout route
 userRouter.post("/logout", async (req: Request, res: Response) => {
     var flag = false;
     try {
@@ -188,20 +189,19 @@ userRouter.post("/logout", async (req: Request, res: Response) => {
     }
 })
 
+//active session data route
 userRouter.get("/auth", async (req: Request, res: Response) => {
-
     try{
         var authData =  req.session.userData;
         res.json({message:"User Session:",authData});
     }catch(error){
         console.log(error);
         res.status(500).send("Internal Session error Occured !");
-    }
-        
+    }      
 })
 
+//user data route
 userRouter.get("/userData", async (req: Request, res: Response) => {
-
     try{
         const userData = await denizenDb.collections.user.findOne({ email: req.session.userData.email });
     
@@ -213,4 +213,18 @@ userRouter.get("/userData", async (req: Request, res: Response) => {
         res.status(500).send("Internal Session error Occured !");
     }
     
+})
+
+//user update route
+userRouter.put("/update", async (req: Request, res: Response) => {
+    try {
+        console.log(req.body);
+        const updatedUser = await updateUserDetails(req.body, req.session.userData);
+        
+        !updatedUser ?
+            res.status(500).json({ message: "Error while updating seller data" }) :
+            res.status(200).json({ message: "Seller data updated successfully" })
+    } catch (error) {
+        console.log(error)
+    }
 })

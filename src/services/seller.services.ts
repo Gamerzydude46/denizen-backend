@@ -14,7 +14,7 @@ export const insertSeller = async (seller: Seller): Promise<ObjectId> => {
 }
 
 
-export const checkUserExistence = async (ref_email: string): null | Promise<WithId<Seller>> => {
+export const checkSellerExistence = async (ref_email: string): null | Promise<WithId<Seller>> => {
     if (ref_email == undefined) {
         return null;
     }

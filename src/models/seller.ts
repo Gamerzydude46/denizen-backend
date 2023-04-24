@@ -12,7 +12,7 @@ export default class Seller {
         public ref_id: string,
         public ref_email:string,
         public business_name: string | null,
-        public business_address: Business_Address,
+        public business_address: Business_Address ,
         public _id?: ObjectId,
     ) {}
 }

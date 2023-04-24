@@ -1,5 +1,6 @@
 import { userSchemaValidation } from "../models/user";
 import { sellerSchemaValidation } from "../models/seller";
+import { postItemsSchemaValidation } from "../models/postItems";
 import { denizenDb } from "./database.services";
 
 export const initDb = async () => {
@@ -26,6 +27,19 @@ export const initDb = async () => {
         .catch((err) => {
             console.log(
                 "Collection < " + process.env.SELLER_COLLECTION_NAME + " > already exist, skipping schema validation. ",
+            );
+        });
+
+    //PostItems
+    await denizenDb.db
+        .createCollection(process.env.POST_COLLECTION_NAME)
+        .then(async () => {
+            await postItemsSchemaValidation();
+            console.log("Created collection " + process.env.POST_COLLECTION_NAME);
+        })
+        .catch((err) => {
+            console.log(
+                "Collection < " + process.env.POST_COLLECTION_NAME + " > already exist, skipping schema validation. ",
             );
         });
 };

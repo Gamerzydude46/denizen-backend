@@ -80,6 +80,3 @@ postItemsRouter.put("/accepted", async (req: Request, res: Response) => {
     }
 })
 
-function makeStorageClient() {
-    throw new Error("Function not implemented.");
-}

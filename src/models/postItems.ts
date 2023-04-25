@@ -23,7 +23,7 @@ export default class PostItems {
 
 export const postItemsSchemaValidation = async () => {
     const validationCommand = {
-        collMod: process.env.SELLER_COLLECTION_NAME,
+        collMod: process.env.POST_COLLECTION_NAME,
         validator: {
             $jsonSchema: {
                 bsonType: "object",
@@ -92,11 +92,11 @@ export const postItemsSchemaValidation = async () => {
                         properties: {
                             URL: {
                                 bsonType: "string",
-                                description: "residence is of type string, and is required",
+                                description: "URL is of type string, and is required",
                             },
                             name: {
                                 bsonType: "string",
-                                description: "state is of type string, and is required",
+                                description: "name is of type string, and is required",
                             },
                         }
                     },

@@ -28,6 +28,8 @@ export const checkUserExistence = async (email: string): null | Promise<WithId<U
     return undefined;
 };
 
+
+//user deatils section update
 export const updateUserDetails = async (newData: {
     fname: string,
     lname: string,
@@ -36,13 +38,6 @@ export const updateUserDetails = async (newData: {
     gender: "male" | "female" | "others",
     pan: string,
     adhar: number,
-    address: {
-        city: string,
-        contact: number,
-        pincode: number,
-        residence: string,
-        state: string
-    }
 }, userData: DenizenUserSession): null | Promise<ObjectId> => {
     const updatedDocument = await denizenDb.collections.user.updateOne({ email: userData.email }, {
         $set: {
@@ -53,7 +48,6 @@ export const updateUserDetails = async (newData: {
             gender: newData.gender,
             pan: newData.pan,
             adhar: newData.adhar,
-            address: newData.address
         }
     })
     console.log(updatedDocument)
@@ -64,6 +58,29 @@ export const updateUserDetails = async (newData: {
     return updatedDocument.upsertedId;
 }
 
+
+//user Address section update
+export const updateUserAddressDetails = async (newData: {
+    address: {
+        city: string,
+        contact: number,
+        pincode: number,
+        residence: string,
+        state: string
+    }
+}, userData: DenizenUserSession): null | Promise<ObjectId> => {
+    const updatedDocument = await denizenDb.collections.user.updateOne({ email: userData.email }, {
+        $set: {
+            address: newData.address
+        }
+    })
+    console.log(updatedDocument)
+    if (updatedDocument.acknowledged == false) {
+        return null
+    }
+
+    return updatedDocument.upsertedId;
+}
 
 export const verifyUser = async (userData: DenizenUserSession): null | Promise<ObjectId> => {
     const updatedDocument = await denizenDb.collections.user.updateOne({ email: userData.email }, {

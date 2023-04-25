@@ -4,7 +4,8 @@ import { insertSeller, checkSellerExistence, updateSellerDetails } from "../serv
 import { denizenDb } from "../services/database.services";
 export const sellerRouter = Router();
 
-
+//create seller doc in seller collection
+//http://localhost:8080/seller/create
 sellerRouter.post("/create", async (req: Request, res: Response) => {
     const seller: Seller = {
         ref_id: req.session.userData.userId.toString(),

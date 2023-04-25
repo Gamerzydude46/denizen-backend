@@ -1,7 +1,7 @@
 import { Request, Response, Router } from "express";
 import nodemailer from 'nodemailer';
 import User from "../models/user";
-import { checkUserExistence, createUser , updateUserDetails, verifyUser} from "../services/user.services";
+import { checkUserExistence, createUser , updateUserDetails, verifyUser, updateUserAddressDetails} from "../services/user.services";
 import { denizenDb } from "../services/database.services";
 const bcrypt = require('bcrypt');
 export const userRouter = Router();
@@ -223,6 +223,21 @@ userRouter.put("/update", async (req: Request, res: Response) => {
     try {
         console.log(req.body);
         const updatedUser = await updateUserDetails(req.body, req.session.userData);
+        
+        !updatedUser ?
+            res.status(500).json({ message: "Error while updating User data" }) :
+            res.status(200).json({ message: "User data updated successfully" })
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+//user update route for Address section
+//http://localhost:8080/user/updateAdd
+userRouter.put("/updateAdd", async (req: Request, res: Response) => {
+    try {
+        console.log(req.body);
+        const updatedUser = await updateUserAddressDetails(req.body, req.session.userData);
         
         !updatedUser ?
             res.status(500).json({ message: "Error while updating User data" }) :

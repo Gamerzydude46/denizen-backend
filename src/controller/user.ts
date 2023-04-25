@@ -1,7 +1,7 @@
 import { Request, Response, Router } from "express";
 import nodemailer from 'nodemailer';
 import User from "../models/user";
-import { checkUserExistence, createUser ,updateUserDetails } from "../services/user.services";
+import { checkUserExistence, createUser , updateUserDetails, verifyUser} from "../services/user.services";
 import { denizenDb } from "../services/database.services";
 const bcrypt = require('bcrypt');
 export const userRouter = Router();
@@ -190,6 +190,7 @@ userRouter.post("/logout", async (req: Request, res: Response) => {
 })
 
 //active session data route
+//http://localhost:8080/user/auth
 userRouter.get("/auth", async (req: Request, res: Response) => {
     try{
         var authData =  req.session.userData;
@@ -201,13 +202,14 @@ userRouter.get("/auth", async (req: Request, res: Response) => {
 })
 
 //user data route
+//http://localhost:8080/user/userData
 userRouter.get("/userData", async (req: Request, res: Response) => {
     try{
         const userData = await denizenDb.collections.user.findOne({ email: req.session.userData.email });
     
         !userData ?
             res.status(500).json({ message: "Error while getting seller" }) :
-            res.status(200).json({ message: "Seller located....", data: userData })
+            res.status(200).json({ message: "User located....", data: userData })
     }catch(error){
         console.log(error);
         res.status(500).send("Internal Session error Occured !");
@@ -216,14 +218,29 @@ userRouter.get("/userData", async (req: Request, res: Response) => {
 })
 
 //user update route
+//http://localhost:8080/user/update
 userRouter.put("/update", async (req: Request, res: Response) => {
     try {
         console.log(req.body);
         const updatedUser = await updateUserDetails(req.body, req.session.userData);
         
         !updatedUser ?
-            res.status(500).json({ message: "Error while updating seller data" }) :
-            res.status(200).json({ message: "Seller data updated successfully" })
+            res.status(500).json({ message: "Error while updating User data" }) :
+            res.status(200).json({ message: "User data updated successfully" })
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+//verify user
+//http://localhost:8080/user/verify
+userRouter.put("/verify", async (req: Request, res: Response) => {
+    try {
+        const updatedUser = await verifyUser(req.session.userData);
+        
+        !updatedUser ?
+            res.status(500).json({ message: "Error while verifying User " }) :
+            res.status(200).json({ message: "User verified successfully" })
     } catch (error) {
         console.log(error)
     }

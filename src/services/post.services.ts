@@ -1,24 +1,7 @@
 import PostItems from "../models/postItems";
 import { InsertOneResult, ObjectId, WithId } from "mongodb";
 import { denizenDb } from "./database.services";
-const multer = require('multer');
 import { DenizenUserSession } from "custom";
-
-
-//storage config
-const storage = multer.diskStorage({
-    destination: function (req: any, file: any, cb: any) {
-        cb(null, './dataBase/postItems')
-    },
-    filename: function (req: any, file: any, cb: any) {
-        const uniqueSuffix = Math.round(Math.random() * 1E9)
-        cb(null, uniqueSuffix+ '-' +file.originalname )
-    }
-})
-
-//imageupload
-export const uploadItem = multer({ storage: storage }).single('image');
-
 
 //insert item in postItems Collection
 export const createItem = async (postItems: PostItems): null | Promise<ObjectId> => {

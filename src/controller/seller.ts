@@ -33,6 +33,9 @@ sellerRouter.post("/create", async (req: Request, res: Response) => {
 
 })
 
+
+//update seller deatils
+//http://localhost:8080/seller/update
 sellerRouter.put("/update", async (req: Request, res: Response) => {
     try {
         console.log(req.body);
@@ -47,6 +50,9 @@ sellerRouter.put("/update", async (req: Request, res: Response) => {
     }
 })
 
+
+//get seller deatils
+//http://localhost:8080/seller/getSeller
 sellerRouter.get("/getSeller", async (req: Request, res: Response) => {
     const seller = await denizenDb.collections.seller.findOne({ ref_email: req.session.userData.email });
 

@@ -63,3 +63,18 @@ export const updateUserDetails = async (newData: {
 
     return updatedDocument.upsertedId;
 }
+
+
+export const verifyUser = async (userData: DenizenUserSession): null | Promise<ObjectId> => {
+    const updatedDocument = await denizenDb.collections.user.updateOne({ email: userData.email }, {
+        $set: {
+            verified: true
+        }
+    })
+    console.log(updatedDocument)
+    if (updatedDocument.acknowledged == false) {
+        return null
+    }
+
+    return updatedDocument.upsertedId;
+}

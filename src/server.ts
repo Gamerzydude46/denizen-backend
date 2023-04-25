@@ -18,6 +18,7 @@ const store = new mongoStore({
     expires: 1000 * 60,
 });
 
+//express app setup with cors
 const app = express();
 const port = 8080; // default port to listen
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -31,6 +32,7 @@ app.use(
     }),
 );
 
+//session config
 app.use(
     session({
         resave: false,
@@ -42,6 +44,7 @@ app.use(
 );
 dotenv.config();
 
+//Api routes(main)
 connectToDatabase().then(() => {
     app.use("/user", userRouter);
     app.use("/seller", sellerRouter);

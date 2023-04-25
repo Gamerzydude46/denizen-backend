@@ -14,7 +14,7 @@ export default class PostItems {
         public delivery_date: string,
         public delivery_by: string,
         public category: "small" | "medium" | "large" ,
-        public image: Image,
+        public imageURL: Image,
         public accepted: boolean,
         public delivered: boolean,
         public _id?: ObjectId,
@@ -38,7 +38,7 @@ export const postItemsSchemaValidation = async () => {
                     "delivery_date",
                     "delivery_by",
                     "category",
-                    "image"
+                    "imageURL"
                 ],
                 additionalProperties: false,
                 properties: {
@@ -86,17 +86,17 @@ export const postItemsSchemaValidation = async () => {
                         enum: ["small" , "medium" , "large"],
                         description: "type can be 'small' | 'medium' | 'large' and is required",
                     },
-                    image: {
+                    imageURL: {
                         bsonType: "object",
                         additionalProperties: false,
                         properties: {
-                            data: {
-                                bsonType: "Buffer",
+                            URL: {
+                                bsonType: "string",
                                 description: "residence is of type string, and is required",
                             },
-                            contentType: {
+                            name: {
                                 bsonType: "string",
-                                description: "district is of type string, and is required",
+                                description: "state is of type string, and is required",
                             },
                         }
                     },

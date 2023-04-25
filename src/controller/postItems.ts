@@ -1,8 +1,7 @@
 import { Request, Response, Router } from "express";
 import PostItems from "../models/postItems";
-import { createItem,checkItemExistence, uploadItem , updateItemDetails, updateUserEmail} from "../services/post.services";
+import { createItem,checkItemExistence, updateItemDetails, updateUserEmail} from "../services/post.services";
 import { denizenDb } from "../services/database.services";
-import { ALL } from "dns";
 const multer = require('multer');
 export const postItemsRouter = Router();
 
@@ -10,73 +9,42 @@ export const postItemsRouter = Router();
 //create new item collection route
 //http://localhost:8080/postItems/post
 postItemsRouter.post("/post", async (req: Request, res: Response) => {
-    uploadItem(req, res, async(err: any) => {
-        if (err) {
-            console.log(err)
-        } else {
-            const postItems: PostItems = {
-                seller_email: req.session.userData.email,
-                user_email: null,
-                item_name: req.body.item_name,
-                delivery_address: req.body.delivery_address,
-                item_cost: req.body.item_cost,
-                delivery_cost: req.body.delivery_cost,
-                distance: req.body.distance,
-                delivery_date: req.body.delivery_date,
-                delivery_by: req.body.delivery_by,
-                category: req.body.category,
-                image: {
-                    data: (req as unknown as MulterRequest).file,
-                    contentType: 'image/png/jpeg/jpg'
-                },
-                accepted: false,
-                delivered: false,
-            }
 
-            // Check already exist
-            var flag = await checkItemExistence(postItems.seller_email);
-            if (flag === undefined) {
-                const itemCreation = await createItem(postItems);
-                !itemCreation ?
-                    res.status(500).json({ message: "Error while uploading new item" }) :
-                    res.status(200).json({ message: "New Item uploaded  Succesfully !", flag: true })
-            }
-            else {
-                res.status(200).json({ message: "This Item alredy uploaded !", flag: false })
-            }
-        }
-    })
+            //console.log(makeStorageClientFile())
+                    const postItems: PostItems = {
+                        seller_email: req.session.userData.email,
+                        user_email: null,
+                        item_name: req.body.item_name,
+                        delivery_address: req.body.delivery_address,
+                        item_cost: req.body.item_cost,
+                        delivery_cost: req.body.delivery_cost,
+                        distance: req.body.distance,
+                        delivery_date: req.body.delivery_date,
+                        delivery_by: req.body.delivery_by,
+                        category: req.body.category,
+                        imageURL: req.body.imageURL,
+                        accepted: false,
+                        delivered: false,
+                    }
+
+                    // Check already exist
+                    var flag = await checkItemExistence(postItems.seller_email);
+                    if (flag === undefined) {
+                        const itemCreation = await createItem(postItems);
+                        !itemCreation ?
+                            res.status(500).json({ message: "Error while uploading new item" }) :
+                            res.status(200).json({ message: "New Item uploaded  Succesfully !", flag: true })
+                    }
+                    else {
+                        res.status(200).json({ message: "This Item alredy uploaded !", flag: false })
+                    }
+            
 })
 
 //get all items available in collection  route
 //http://localhost:8080/postItems/getItems
 postItemsRouter.get("/getItems", async (req: Request, res: Response) => {
-    const allItems = await denizenDb.collections.postItems.aggregate([
-        {
-            '$lookup': {
-                'from': 'postItems',
-                'localField': '_id',
-                'foreignField': 'seller_email',
-                'as': 'itemList'
-            }
-        }, {
-            '$replaceRoot': {
-                'newRoot': {
-                    '$mergeObjects': [
-                        {
-                            '$arrayElemAt': [
-                                '$item', 0
-                            ]
-                        }, '$$ROOT'
-                    ]
-                }
-            }
-        }, {
-            '$project': {
-                'postItems': 0,
-            }
-        }
-    ]).toArray();
+    const allItems = await denizenDb.collections.postItems.aggregate().toArray();
     console.log(allItems);
     !allItems ?
         res.status(500).json({ message: "Error while getting all posted items" }) :
@@ -111,3 +79,7 @@ postItemsRouter.put("/accepted", async (req: Request, res: Response) => {
         console.log(error)
     }
 })
+
+function makeStorageClient() {
+    throw new Error("Function not implemented.");
+}

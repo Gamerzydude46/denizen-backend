@@ -1,6 +1,6 @@
 interface Image {
-    data: Buffer;
-    contentType: string;
+    URL: string;
+    name: string;
 }
 
 interface MulterRequest extends Request {

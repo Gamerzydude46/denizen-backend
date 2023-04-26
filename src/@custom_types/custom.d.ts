@@ -3,6 +3,7 @@ import User from "../models/user";
 import Seller from "../models/seller";
 import PostItems from "../models/postItems";
 import Documents from "../models/documents";
+import DeliveryData from "../models/deliveryData";
 
 
 type DenizenCollections = {
@@ -10,6 +11,7 @@ type DenizenCollections = {
     seller?: mongoDB.Collection<Seller>;
     postItems?: mongoDB.Collection<PostItems>;
     documents?: mongoDB.Collection<Documents>;
+    deliveryData?: mongoDB.Collection<DeliveryData>;
 };
 
 type DenizenDatabase = {

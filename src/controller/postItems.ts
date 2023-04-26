@@ -2,7 +2,6 @@ import { Request, Response, Router } from "express";
 import PostItems from "../models/postItems";
 import { createItem,checkItemExistence, updateItemDetails, updateUserEmail} from "../services/post.services";
 import { denizenDb } from "../services/database.services";
-const multer = require('multer');
 export const postItemsRouter = Router();
 
 

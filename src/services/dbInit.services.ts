@@ -2,6 +2,7 @@ import { userSchemaValidation } from "../models/user";
 import { sellerSchemaValidation } from "../models/seller";
 import { postItemsSchemaValidation } from "../models/postItems";
 import { documentsSchemaValidation } from "../models/documents";
+import { deliveryDataSchemaValidation } from "../models/deliveryData";
 import { denizenDb } from "./database.services";
 
 export const initDb = async () => {
@@ -44,7 +45,7 @@ export const initDb = async () => {
             );
         });
 
-        //Documents
+    //Documents
     await denizenDb.db
     .createCollection(process.env.DOC_COLLECTION_NAME)
     .then(async () => {
@@ -54,6 +55,19 @@ export const initDb = async () => {
     .catch((err) => {
         console.log(
             "Collection < " + process.env.DOC_COLLECTION_NAME + " > already exist, skipping schema validation. ",
+        );
+    });
+
+    //DeliveryData
+    await denizenDb.db
+    .createCollection(process.env.DELIVERY_COLLECTION_NAME)
+    .then(async () => {
+        await deliveryDataSchemaValidation();
+        console.log("Created collection " + process.env.DELIVERY_COLLECTION_NAME);
+    })
+    .catch((err) => {
+        console.log(
+            "Collection < " + process.env.DELIVERY_COLLECTION_NAME + " > already exist, skipping schema validation. ",
         );
     });
 };

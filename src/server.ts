@@ -6,6 +6,7 @@ import { userRouter } from "./controller/user";
 import { sellerRouter } from "./controller/seller";
 import { postItemsRouter } from "./controller/postItems";
 import { documentsRouter } from "./controller/documents";
+import { deliveryRouter } from "./controller/deliveryData";
 import bodyParser from "body-parser";
 import session from "express-session";
 import MongoDBStore from "connect-mongodb-session";
@@ -51,6 +52,7 @@ connectToDatabase().then(() => {
     app.use("/seller", sellerRouter);
     app.use("/postItems", postItemsRouter);
     app.use("/documents", documentsRouter);
+    app.use("/delData", deliveryRouter);
     app.listen(port, () => {
         console.log(`server started at http://localhost:${port}`);
     });

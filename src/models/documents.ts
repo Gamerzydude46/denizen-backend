@@ -18,7 +18,7 @@ export const documentsSchemaValidation = async () => {
         validator: {
             $jsonSchema: {
                 bsonType: "object",
-                required: ["ref_id", "ref_email"],
+                required: ["ref_email" ,"profile_picture", "resident", "liscence", "registration"],
                 additionalProperties: false,
                 properties: {
                     _id: {

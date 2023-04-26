@@ -17,6 +17,7 @@ export default class PostItems {
         public imageURL: Image,
         public accepted: boolean,
         public delivered: boolean,
+        public special: boolean,
         public _id?: ObjectId,
     ) {}
 }
@@ -106,7 +107,11 @@ export const postItemsSchemaValidation = async () => {
                     },
                     delivered: {
                         bsonType: "bool",
-                        description: "deliveredis a boolean, and is requrired",
+                        description: "delivered is a boolean, and is requrired",
+                    },
+                    special: {
+                        bsonType: "bool",
+                        description: "special is a boolean, and is requrired",
                     },
                 },
             },

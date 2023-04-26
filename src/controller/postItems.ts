@@ -24,6 +24,7 @@ postItemsRouter.post("/post", async (req: Request, res: Response) => {
                         imageURL: req.body.imageURL,
                         accepted: false,
                         delivered: false,
+                        special: false,
                     }
 
                     // Check already exist
@@ -40,6 +41,41 @@ postItemsRouter.post("/post", async (req: Request, res: Response) => {
             
 })
 
+
+//create new item collection route (for special request)
+//http://localhost:8080/postItems/post
+postItemsRouter.post("/post", async (req: Request, res: Response) => {
+    //console.log(makeStorageClientFile())
+            const postItems: PostItems = {
+                seller_email: req.session.userData.email,
+                user_email: null,
+                item_name: req.body.item_name,
+                delivery_address: req.body.delivery_address,
+                item_cost: req.body.item_cost,
+                delivery_cost: req.body.delivery_cost,
+                distance: req.body.distance,
+                delivery_date: req.body.delivery_date,
+                delivery_by: req.body.delivery_by,
+                category: req.body.category,
+                imageURL: req.body.imageURL,
+                accepted: false,
+                delivered: false,
+                special: true,
+            }
+
+            // Check already exist
+            var flag = await checkItemExistence(postItems.seller_email);
+            if (flag === undefined) {
+                const itemCreation = await createItem(postItems);
+                !itemCreation ?
+                    res.status(500).json({ message: "Error while uploading new item for special request" }) :
+                    res.status(200).json({ message: "New Item uploaded  Succesfully for special request !", flag: true })
+            }
+            else {
+                res.status(200).json({ message: "This Item alredy uploaded for special request!", flag: false })
+            }
+    
+})
 //get all items available in collection  route
 //http://localhost:8080/postItems/getItems
 postItemsRouter.get("/getItems", async (req: Request, res: Response) => {

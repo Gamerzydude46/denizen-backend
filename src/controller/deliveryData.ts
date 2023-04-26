@@ -27,3 +27,46 @@ deliveryRouter.post("/create", async (req: Request, res: Response) => {
     }
 
 })
+
+//get all delivery users for special delivery req
+//http://localhost:8080/delData/create
+deliveryRouter.get("/getDeliveryUser", async (req: Request, res: Response) => {
+    const allItems = await denizenDb.collections.deliveryData.aggregate([
+        {
+            $lookup: {
+                from: "User",
+                localField: "ref_email",
+                foreignField: "email",
+                as: "deliveryUsers",
+            },
+        },
+        {
+            $replaceRoot: {
+                newRoot: {
+                    $mergeObjects: [
+                        {
+                            $arrayElemAt: ["$deliveryUsers", 0],
+                        },
+                        "$$ROOT",
+                    ],
+                },
+            },
+        },
+        {
+            $project: {
+                ref_email: 1,
+                fname: 1,
+                lname: 1,
+                address: 1,
+                no_deliveries: 1,
+                ratings: 1,
+            },
+        },
+    ])
+    .toArray();
+
+    console.log(allItems);
+    !allItems ?
+        res.status(500).json({ message: "Error while getting all posted items" }) :
+        res.status(200).json({ message: "All posted items retrived successfully!", itemSet: allItems })
+})

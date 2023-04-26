@@ -6,3 +6,8 @@ interface Image {
 interface MulterRequest extends Request {
     file: any;
 }
+
+interface Receiver {
+    name: string;
+    contact: number;
+}

@@ -6,6 +6,7 @@ export default class PostItems {
     constructor(
         public seller_email:string,
         public user_email:string | null,
+        public receiver: Receiver,
         public item_name: string,
         public delivery_address: string,
         public item_cost: number,
@@ -38,7 +39,9 @@ export const postItemsSchemaValidation = async () => {
                     "delivery_date",
                     "delivery_by",
                     "category",
-                    "imageURL"
+                    "imageURL",
+                    "accepted",
+                    "delivered",
                 ],
                 additionalProperties: false,
                 properties: {
@@ -53,6 +56,20 @@ export const postItemsSchemaValidation = async () => {
                     user_email: {
                         bsonType: ["string","null"],
                         description: "user_email from postItems collection of type string and is required",
+                    },
+                    receiver: {
+                        bsonType: "object",
+                        additionalProperties: false,
+                        properties: {
+                            name: {
+                                bsonType: "string",
+                                description: "URL is of type string, and is required",
+                            },
+                            contact: {
+                                bsonType: "number",
+                                description: "name is of type string, and is required",
+                            },
+                        }
                     },
                     item_name: {
                         bsonType: "string",

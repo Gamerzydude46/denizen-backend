@@ -9,12 +9,12 @@ export const postItemsRouter = Router();
 //create new item collection route
 //http://localhost:8080/postItems/post
 postItemsRouter.post("/post", async (req: Request, res: Response) => {
-
             //console.log(makeStorageClientFile())
                     const postItems: PostItems = {
                         seller_email: req.session.userData.email,
                         user_email: null,
                         item_name: req.body.item_name,
+                        receiver: req.body.receiver,
                         delivery_address: req.body.delivery_address,
                         item_cost: req.body.item_cost,
                         delivery_cost: req.body.delivery_cost,

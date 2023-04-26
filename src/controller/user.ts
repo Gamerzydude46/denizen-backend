@@ -240,7 +240,10 @@ userRouter.put("/updateAdd", async (req: Request, res: Response) => {
         const updatedUser = await updateUserAddressDetails(req.body, req.session.userData);
         
         !updatedUser ?
-            res.status(500).json({ message: "Error while updating User data" }) :
+            res.status(500).json({ message: "Error while updating User data"
+        
+        
+        }) :
             res.status(200).json({ message: "User data updated successfully" })
     } catch (error) {
         console.log(error)

@@ -12,8 +12,8 @@ postItemsRouter.post("/post", async (req: Request, res: Response) => {
                     const postItems: PostItems = {
                         seller_email: req.session.userData.email,
                         user_email: null,
-                        item_name: req.body.item_name,
                         receiver: req.body.receiver,
+                        item_name: req.body.item_name,
                         delivery_address: req.body.delivery_address,
                         item_cost: req.body.item_cost,
                         delivery_cost: req.body.delivery_cost,
@@ -48,7 +48,8 @@ postItemsRouter.post("/post", async (req: Request, res: Response) => {
     //console.log(makeStorageClientFile())
             const postItems: PostItems = {
                 seller_email: req.session.userData.email,
-                user_email: null,
+                user_email: req.body.user_email,
+                receiver: req.body.receiver,
                 item_name: req.body.item_name,
                 delivery_address: req.body.delivery_address,
                 item_cost: req.body.item_cost,

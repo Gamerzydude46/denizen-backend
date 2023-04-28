@@ -87,7 +87,7 @@ postItemsRouter.post("/postSpecial", async (req: Request, res: Response) => {
 //get all items available in collection  route for  Common feed
 //http://localhost:8080/postItems/getItems
 postItemsRouter.get("/getItems", async (req: Request, res: Response) => {
-    const allItems = await denizenDb.collections.postItems.find({accepted:false}).toArray();
+    const allItems = await denizenDb.collections.postItems.find({delivered:false}).toArray();
     console.log(allItems);
     !allItems ?
         res.status(500).json({ message: "Error while getting all posted items" }) :

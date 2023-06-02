@@ -175,8 +175,6 @@ userRouter.post("/password-reset", async (req: Request, res: Response) => {
 userRouter.post("/logout", async (req: Request, res: Response) => {
     var flag = false;
     try {
-        console.log("logout session");
-        console.log(req.session);
         await req.session.destroy(err => {
             console.log("Session Terminated !");
         })

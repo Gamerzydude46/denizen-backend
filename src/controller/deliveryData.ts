@@ -72,9 +72,7 @@ deliveryRouter.get("/getDeliveryUser", async (req: Request, res: Response) => {
 })
 
 deliveryRouter.get("/cfAlgo", async (req: Request, res: Response) => {
-
     const dataSet = await denizenDb.collections.deliveryData.find().toArray();
-
     const users: Array<any> = [];
     const items: Array<any> = [];
     const ratings: Array<any> = [];

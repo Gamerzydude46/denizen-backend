@@ -234,7 +234,6 @@ userRouter.put("/update", async (req: Request, res: Response) => {
 //http://localhost:8080/user/updateAdd
 userRouter.put("/updateAdd", async (req: Request, res: Response) => {
     try {
-        console.log(req.body);
         const updatedUser = await updateUserAddressDetails(req.body, req.session.userData);
         
         !updatedUser ?
@@ -252,6 +251,7 @@ userRouter.put("/updateAdd", async (req: Request, res: Response) => {
 //http://localhost:8080/user/verify
 userRouter.put("/verify", async (req: Request, res: Response) => {
     try {
+        console.log(req.session.userData)
         const updatedUser = await verifyUser(req.session.userData);
         
         !updatedUser ?

@@ -40,13 +40,13 @@ sellerRouter.post("/create", async (req: Request, res: Response) => {
 sellerRouter.put("/update", async (req: Request, res: Response) => {
     try {
         console.log(req.body);
-        console.log(req.session.userData);
         const updatedSeller = await updateSellerDetails(req.body, req.session.userData);
         
         updatedSeller ?
             res.status(500).json({ message: "Error while updating seller data" }) :
             res.status(200).json({ message: "Seller data updated successfully" })
     } catch (error) {
+        // console.log(error);
         console.log(error.errInfo.details.schemaRulesNotSatisfied)
     }
 })

@@ -14,7 +14,7 @@ documentsRouter.post("/upload", async (req: Request, res: Response) => {
         liscence: req.body.liscence,
         registration: req.body.registration,
     }
-    
+    console.log(req.body)
     var flag = await checkDocumentsExistence(documents.ref_email);
     if (flag === undefined) {
         const docUploaded = await uploadDocuments(documents);

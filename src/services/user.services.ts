@@ -31,18 +31,18 @@ export const checkUserExistence = async (email: string): null | Promise<WithId<U
 
 //user deatils section update
 export const updateUserDetails = async (newData: {
-    fname: string,
-    lname: string,
+    // fname: string,
+    // lname: string,
     mname: string,
     dob: string,
     gender: "male" | "female" | "others",
     pan: string,
     adhar: number,
 }, userData: DenizenUserSession): null | Promise<ObjectId> => {
-    const updatedDocument = await denizenDb.collections.user.updateOne({ email: userData.email }, {
+    const updatedDocument = await denizenDb.collections.user.updateOne({ email:userData.email }, {
         $set: {
-            fname: newData.fname,
-            lname: newData.lname,
+            // fname: newData.fname,
+            // lname: newData.lname,
             mname: newData.mname,
             dob: newData.dob,
             gender: newData.gender,

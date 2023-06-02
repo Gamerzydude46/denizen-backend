@@ -4,6 +4,7 @@ import { insertData, checkDataExistence } from "../services/delivery.services";
 import { denizenDb } from "../services/database.services";
 export const deliveryRouter = Router();
 
+
 //create seller doc in seller collection
 //http://localhost:8080/delData/create
 deliveryRouter.post("/create", async (req: Request, res: Response) => {
@@ -25,7 +26,6 @@ deliveryRouter.post("/create", async (req: Request, res: Response) => {
     else {
         res.status(200).json({ message: "Delivery data already exist !", flag: false })
     }
-
 })
 
 //get all delivery users for special delivery req

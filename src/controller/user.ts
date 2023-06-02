@@ -254,7 +254,7 @@ userRouter.put("/verify", async (req: Request, res: Response) => {
         console.log(req.session.userData)
         const updatedUser = await verifyUser(req.session.userData);
         
-        !updatedUser ?
+        updatedUser ?
             res.status(500).json({ message: "Error while verifying User " }) :
             res.status(200).json({ message: "User verified successfully" })
     } catch (error) {

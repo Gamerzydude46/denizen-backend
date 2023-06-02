@@ -9,6 +9,8 @@ export default class PostItems {
         public receiver: Receiver,
         public item_name: string,
         public delivery_address: string,
+        public latitude: number,
+        public longitude: number,
         public item_cost: number,
         public delivery_cost: number,
         public distance: number,
@@ -33,6 +35,8 @@ export const postItemsSchemaValidation = async () => {
                     "seller_email", 
                     "item_name" ,
                     "delivery_address",
+                    "latitude",
+                    "longitude",
                     "item_cost",
                     "delivery_cost",
                     "distance",
@@ -79,6 +83,14 @@ export const postItemsSchemaValidation = async () => {
                     delivery_address: {
                         bsonType: "string",
                         description: "delivery_address from postItems collection of type string and is required",
+                    },
+                    latitude: {
+                        bsonType: "number",
+                        description: "latitude from postItems collection of type string and is required",
+                    },
+                    longitude: {
+                        bsonType: "number",
+                        description: "longitude from postItems collection of type string and is required",
                     },
                     item_cost: {
                         bsonType: "number",

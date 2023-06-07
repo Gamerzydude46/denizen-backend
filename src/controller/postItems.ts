@@ -12,9 +12,12 @@ postItemsRouter.post("/post", async (req: Request, res: Response) => {
                     const postItems: PostItems = {
                         seller_email: req.session.userData.email,
                         user_email: null,
-                        receiver: req.body.receiver,
+                        receiver:{name:req.body.name,
+                                    contact:req.body.contact} ,
                         item_name: req.body.item_name,
                         delivery_address: req.body.delivery_address,
+                        latitude:req.body.latitude,
+                        longitude:req.body.longitude,
                         item_cost: req.body.item_cost,
                         delivery_cost: req.body.delivery_cost,
                         distance: req.body.distance,
@@ -26,7 +29,7 @@ postItemsRouter.post("/post", async (req: Request, res: Response) => {
                         delivered: false,
                         special: false,
                     }
-
+                    console.log(req.body)
                     // Check already exist
                     var flag = await checkItemExistence(postItems.seller_email);
                     if (flag === undefined) {
@@ -52,6 +55,8 @@ postItemsRouter.post("/postSpecial", async (req: Request, res: Response) => {
                 receiver: req.body.receiver,
                 item_name: req.body.item_name,
                 delivery_address: req.body.delivery_address,
+                latitude:req.body.latitude,
+                longitude:req.body.longitude,
                 item_cost: req.body.item_cost,
                 delivery_cost: req.body.delivery_cost,
                 distance: req.body.distance,

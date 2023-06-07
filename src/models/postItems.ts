@@ -34,6 +34,7 @@ export const postItemsSchemaValidation = async () => {
                 required: [
                     "seller_email", 
                     "item_name" ,
+                    "reciever",
                     "delivery_address",
                     "latitude",
                     "longitude",

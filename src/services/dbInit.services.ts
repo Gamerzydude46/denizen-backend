@@ -20,10 +20,10 @@ export const initDb = async () => {
         });
     
     //Seller
+    await sellerSchemaValidation();
     await denizenDb.db
         .createCollection(process.env.SELLER_COLLECTION_NAME)
         .then(async () => {
-            await sellerSchemaValidation();
             console.log("Created collection " + process.env.SELLER_COLLECTION_NAME);
         })
         .catch((err) => {

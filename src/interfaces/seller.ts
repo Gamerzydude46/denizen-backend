@@ -1,8 +1,8 @@
 interface Business_Address {
     residence: string;
     district: string;
-    latitude: string,
-    longitude: string,
+    latitude: number,
+    longitude: number,
     city: string;
     email: string;
     contact: number;

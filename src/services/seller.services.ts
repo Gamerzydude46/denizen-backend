@@ -33,8 +33,8 @@ export const updateSellerDetails = async (newData: {
     business_name: string, business_address: {
         residence: string;
         district: string;
-        latitude: string,
-        longitude: string,
+        latitude: number,
+        longitude: number,
         city: string;
         email: string;
         contact: number;

@@ -12,8 +12,8 @@ postItemsRouter.post("/post", async (req: Request, res: Response) => {
                     const postItems: PostItems = {
                         seller_email: req.session.userData.email,
                         user_email: null,
-                        receiver:{name:req.body.name,
-                                    contact:req.body.contact} ,
+                        receiver:{name:req.body.reciever.name,
+                                    contact:req.body.reciever.contact} ,
                         item_name: req.body.item_name,
                         delivery_address: req.body.delivery_address,
                         latitude:req.body.latitude,

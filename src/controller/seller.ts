@@ -21,13 +21,13 @@ sellerRouter.post("/create", async (req: Request, res: Response) => {
             district: null
         },
     }
-    
+
     var flag = await checkSellerExistence(seller.ref_email);
     if (flag === undefined) {
         const sellerCreation = await insertSeller(seller);
-    !sellerCreation ?
-        res.status(500).json({ message: "Error while inserting seller details" }) :
-        res.status(200).json({ message: "Seller deatils inserted  Succesfully !"})
+        !sellerCreation ?
+            res.status(500).json({ message: "Error while inserting seller details" }) :
+            res.status(200).json({ message: "Seller deatils inserted  Succesfully !" })
 
     }
     else {
@@ -43,7 +43,7 @@ sellerRouter.put("/update", async (req: Request, res: Response) => {
     try {
         console.log(req.body);
         const updatedSeller = await updateSellerDetails(req.body, req.session.userData);
-        
+
         updatedSeller ?
             res.status(500).json({ message: "Error while updating seller data" }) :
             res.status(200).json({ message: "Seller data updated successfully" })
@@ -62,4 +62,12 @@ sellerRouter.get("/getSeller", async (req: Request, res: Response) => {
     !seller ?
         res.status(500).json({ message: "Error while getting seller" }) :
         res.status(200).json({ message: "found seller", data: seller })
+})
+
+sellerRouter.get("/getDistance", async (req: Request, res: Response) => {
+    const seller = await denizenDb.collections.seller.findOne({ ref_email: req.session.userData.email });
+
+    !seller ?
+        res.status(500).json({ message: "Error while getting seller" }) :
+        res.status(200).json({ data: { x: seller.business_address.latitude, y: seller.business_address.longitude } })
 })

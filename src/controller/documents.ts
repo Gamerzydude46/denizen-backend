@@ -49,3 +49,13 @@ documentsRouter.get("/getProfile", async (req: Request, res: Response) => {
         res.status(500).json({ message: "Error while getting documents of user !" }) :
         res.status(200).json({ message: "Found user documents", docs: documents.profile_picture })
 })
+
+
+//http://localhost:8080/documents/getUserProfile
+documentsRouter.post("/getUserProfile", async (req: Request, res: Response) => {
+    const documents = await denizenDb.collections.documents.findOne({ ref_email: req.body.user_email });
+    
+    !documents ?
+        res.status(500).json({ message: "Error while getting documents of user !" }) :
+        res.status(200).json({ message: "Found user documents", docs: documents.profile_picture })
+})

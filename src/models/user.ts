@@ -13,7 +13,7 @@ export default class User {
         public lname: string,
         public mname: string,
         public dob: string,
-        public gender: "male" | "female" | "others" ,
+        public gender: "male" | "female" | "others" |"null",
         public type: "seller" | "delivery",
         public email: string,
         public password: string,
@@ -55,7 +55,7 @@ export const userSchemaValidation = async () => {
                         description: "type can be 'seller' or 'delivery', and is required",
                     },
                     gender: {
-                        enum: ["male", "female", "others","null"],
+                        enum: ["male", "female","others","null"],
                         description: "type can be 'male', 'female', 'others', and is required",
                     },
                     email: {
@@ -76,7 +76,7 @@ export const userSchemaValidation = async () => {
                     },
                     adhar: {
                         bsonType: ["number", "null"],
-                        description: "adhar is of type string, and is required",
+                        description: "adhar is of type number, and is required",
                     },
                     verified: {
                         bsonType: "bool",

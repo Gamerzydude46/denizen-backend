@@ -8,38 +8,44 @@ export const userRouter = Router();
 
 //create new user collection route
 userRouter.post("/create", async (req: Request, res: Response) => {
-    const user: User = {
-        verified: false,
-        email: req.body.email,
-        fname: req.body.fname,
-        mname: null,
-        lname: req.body.lname,
-        dob: null,
-        gender: null,
-        pan: null,
-        adhar: null,
-        password: await bcrypt.hash(req.body.password,8),
-        address: {
-            city: null,
-            contact: null,
-            pincode: null,
-            residence: null,
-            state: null
-        },
-        type: req.body.type,
+    try {
+        console.log(req.body)
+        const user: User = {
+            verified: false,
+            email: req.body.email,
+            fname: req.body.fname,
+            mname: null,
+            lname: req.body.lname,
+            dob: null,
+            gender: "null",
+            pan: null,
+            adhar: null,
+            password: await bcrypt.hash(req.body.password, 8),
+            address: {
+                city: null,
+                contact: null,
+                pincode: null,
+                residence: null,
+                state: null
+            },
+            type: req.body.type,
+        }
+
+        // Check already exist
+        var flag = await checkUserExistence(user.email);
+        if (flag === undefined) {
+            const userCreation = await createUser(user);
+            !userCreation ?
+                res.status(500).json({ message: "Error while creating user" }) :
+                res.status(200).json({ message: "User account created Succesfully !", flag: true })
+        }
+        else {
+            res.status(200).json({ message: "User alredy exist go back and login !", flag: false })
+        }
+    }catch(error) {
+        console.log(JSON.stringify(error.errInfo.details))
     }
 
-    // Check already exist
-    var flag = await checkUserExistence(user.email);
-    if (flag === undefined) {
-        const userCreation = await createUser(user);
-        !userCreation ?
-            res.status(500).json({ message: "Error while creating user" }) :
-            res.status(200).json({ message: "User account created Succesfully !", flag: true })
-    }
-    else {
-        res.status(200).json({ message: "User alredy exist go back and login !", flag: false })
-    }
 
 })
 
@@ -226,7 +232,7 @@ userRouter.put("/update", async (req: Request, res: Response) => {
             res.status(500).json({ message: "Error while updating User data" }) :
             res.status(200).json({ message: "User data updated successfully" })
     } catch (error) {
-        console.log(error)
+        console.log(JSON.stringify(error.errInfo.details))
     }
 })
 
@@ -260,4 +266,21 @@ userRouter.put("/verify", async (req: Request, res: Response) => {
     } catch (error) {
         console.log(error)
     }
+})
+
+
+//delivery user data route
+//http://localhost:8080/user/delUserData
+userRouter.post("/delUserData", async (req: Request, res: Response) => {
+    try{
+        const userData = await denizenDb.collections.user.findOne({ email: req.body.user_email, type: "delivery"});
+    
+        !userData ?
+            res.status(500).json({ message: "Error while getting user" }) :
+            res.status(200).json({ message: "User located....", fname: userData.fname,lname:userData.lname,contact:userData.address.contact,residence:userData.address.residence})
+    }catch(error){
+        console.log(error);
+        res.status(500).send("Internal Session error Occured !");
+    }
+    
 })

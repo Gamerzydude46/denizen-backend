@@ -7,6 +7,7 @@ import { denizenDb } from "./database.services";
 
 export const initDb = async () => {
     //User
+    
     await denizenDb.db
         .createCollection(process.env.USER_COLLECTION_NAME)
         .then(async () => {
@@ -47,16 +48,16 @@ export const initDb = async () => {
 
     //Documents
     await denizenDb.db
-    .createCollection(process.env.DOC_COLLECTION_NAME)
-    .then(async () => {
-        await documentsSchemaValidation();
-        console.log("Created collection " + process.env.DOC_COLLECTION_NAME);
-    })
-    .catch((err) => {
-        console.log(
-            "Collection < " + process.env.DOC_COLLECTION_NAME + " > already exist, skipping schema validation. ",
-        );
-    });
+        .createCollection(process.env.DOC_COLLECTION_NAME)
+        .then(async () => {
+            await documentsSchemaValidation();
+            console.log("Created collection " + process.env.DOC_COLLECTION_NAME);
+        })
+        .catch((err) => {
+            console.log(
+                "Collection < " + process.env.DOC_COLLECTION_NAME + " > already exist, skipping schema validation. ",
+            );
+        });
 
     //DeliveryData
     await denizenDb.db

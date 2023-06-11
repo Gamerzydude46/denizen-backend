@@ -10,9 +10,9 @@ export const deliveryRouter = Router();
 deliveryRouter.post("/create", async (req: Request, res: Response) => {
     const deliveryData: DeliveryData = {
         //chnge to session input
-        ref_email: req.body.ref_email,
-        no_deliveries: req.body.no_deliveries,
-        ratings: req.body.ratings
+        ref_email: req.session.userData.email,
+        no_deliveries: 0,
+        ratings: 1
     }
 
     var flag = await checkDataExistence(deliveryData.ref_email);
@@ -71,6 +71,19 @@ deliveryRouter.get("/getDeliveryUser", async (req: Request, res: Response) => {
         res.status(200).json({ message: "All posted items retrived successfully!", itemSet: allItems })
 })
 
+//get all delivery users for  delivery data req
+//http://localhost:8080/delData/getDeliveryData
+deliveryRouter.put("/getDeliveryData", async (req: Request, res: Response) => {
+    
+    const allItems = await denizenDb.collections.deliveryData.findOne({ref_email: req.body.user_email });
+
+    console.log(allItems);
+    !allItems ?
+        res.status(500).json({ message: "Error while getting user data !" }) :
+        res.status(200).json({ message: "user data found  successfully!", del: allItems.no_deliveries ,rating:allItems.ratings })
+})
+
+//cfalgo
 deliveryRouter.get("/cfAlgo", async (req: Request, res: Response) => {
     const dataSet = await denizenDb.collections.deliveryData.find().toArray();
     const users: Array<any> = [];

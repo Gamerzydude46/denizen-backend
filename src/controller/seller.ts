@@ -1,4 +1,4 @@
-import { Request, Response, Router } from "express";
+import { Request, Response, Router, response } from "express";
 import Seller from "../models/seller";
 import { insertSeller, checkSellerExistence, updateSellerDetails } from "../services/seller.services";
 import { denizenDb } from "../services/database.services";
@@ -71,3 +71,5 @@ sellerRouter.get("/getDistance", async (req: Request, res: Response) => {
         res.status(500).json({ message: "Error while getting seller" }) :
         res.status(200).json({ data: { x: seller.business_address.latitude, y: seller.business_address.longitude } })
 })
+
+

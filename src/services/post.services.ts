@@ -15,12 +15,12 @@ export const createItem = async (postItems: PostItems): null | Promise<ObjectId>
 
 
 //checksum
-export const checkItemExistence = async (seller_email: string): null | Promise<WithId<PostItems>> => {
-    if (seller_email == undefined) {
+export const checkItemExistence = async (item_name: string): null | Promise<WithId<PostItems>> => {
+    if (item_name == undefined) {
         return null;
     }
     let item: WithId<PostItems> = await denizenDb.collections.postItems.findOne({
-        seller_email: seller_email,
+        item_name:item_name,
     });
 
     if (item) {
@@ -32,25 +32,16 @@ export const checkItemExistence = async (seller_email: string): null | Promise<W
 
 //update item(single)
 export const updateItemDetails = async (newData: {
-    item_name: string,
-    delivery_address: string,
+    id: string,
     item_cost: number,
-    delivery_cost: number,
-    distance: number,
     delivery_date: string,
     delivery_by: string,
-    category: "small" | "medium" | "large" ,
 },userData: DenizenUserSession): null | Promise<ObjectId> => {
-    const updatedDocument = await denizenDb.collections.postItems.updateOne({ seller_email: userData.email }, 
+    const updatedDocument = await denizenDb.collections.postItems.updateOne({ _id: new ObjectId(newData.id), seller_email: userData.email }, 
         { $set: { 
-            item_name: newData.item_name, 
-            delivery_address: newData.delivery_address,
             item_cost: newData.item_cost,
-            delivery_cost: newData.delivery_cost,
-            distance: newData.distance,
             delivery_date: newData.delivery_date,
             delivery_by: newData.delivery_by,
-            category: newData.category
         } })
     console.log(updatedDocument)
     if (updatedDocument.acknowledged == false) {
@@ -61,12 +52,36 @@ export const updateItemDetails = async (newData: {
 }
 
 //update user email(assign user to item)
-export const updateUserEmail = async (newData: {seller_email: string,},userData: DenizenUserSession): null | Promise<ObjectId> => {
-    const updatedDocument = await denizenDb.collections.postItems.updateOne({ seller_email: newData.seller_email }, 
-        { $set: { 
-            user_email: userData.email,
-            accepted: true, 
-        } })
+export const updateUserEmail = async (newData: {
+    item_id: string,
+    seller_email: string,
+}, userData: DenizenUserSession): null | Promise<ObjectId> => {
+    const updatedDocument = await denizenDb.collections.postItems.updateOne({ _id: new ObjectId(newData.item_id), seller_email: newData.seller_email },
+        {
+            $set: {
+                user_email: userData.email,
+                accepted: true,
+            }
+        })
+    console.log(updatedDocument)
+    if (updatedDocument.acknowledged == false) {
+        return null
+    }
+
+    return updatedDocument.upsertedId;
+}
+
+//update updateDeliveryStatus
+export const updateDeliveryStatus = async (newData: {
+    item_id: string,
+    seller_email: string,
+}): null | Promise<ObjectId> => {
+    const updatedDocument = await denizenDb.collections.postItems.updateOne({ _id: new ObjectId(newData.item_id), seller_email: newData.seller_email },
+        {
+            $set: {
+                delivered: true,
+            }
+        })
     console.log(updatedDocument)
     if (updatedDocument.acknowledged == false) {
         return null

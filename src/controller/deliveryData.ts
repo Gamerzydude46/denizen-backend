@@ -8,9 +8,10 @@ export const deliveryRouter = Router();
 //create seller doc in seller collection
 //http://localhost:8080/delData/create
 deliveryRouter.post("/create", async (req: Request, res: Response) => {
+     console.log(req.body)
     const deliveryData: DeliveryData = {
         //chnge to session input
-        ref_email: req.session.userData.email,
+        ref_email: req.body.user_email,
         no_deliveries: 0,
         ratings: 1
     }

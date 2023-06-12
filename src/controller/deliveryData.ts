@@ -64,8 +64,6 @@ deliveryRouter.get("/getDeliveryUser", async (req: Request, res: Response) => {
         },
     ])
         .toArray();
-
-    console.log(allItems);
     !allItems ?
         res.status(500).json({ message: "Error while getting all posted items" }) :
         res.status(200).json({ message: "All posted items retrived successfully!", itemSet: allItems })
@@ -74,14 +72,50 @@ deliveryRouter.get("/getDeliveryUser", async (req: Request, res: Response) => {
 //get all delivery users for  delivery data req
 //http://localhost:8080/delData/getDeliveryData
 deliveryRouter.put("/getDeliveryData", async (req: Request, res: Response) => {
-    
-    const allItems = await denizenDb.collections.deliveryData.findOne({ref_email: req.body.user_email });
 
-    console.log(allItems);
+    const allItems = await denizenDb.collections.deliveryData.findOne({ ref_email: req.body.user_email });
+
     !allItems ?
         res.status(500).json({ message: "Error while getting user data !" }) :
-        res.status(200).json({ message: "user data found  successfully!", del: allItems.no_deliveries ,rating:allItems.ratings })
+        res.status(200).json({ message: "user data found  successfully!", del: allItems.no_deliveries, rating: allItems.ratings })
 })
+
+//update delivery data for  delivery users
+//http://localhost:8080/delData/updateDelData
+deliveryRouter.put("/updateDelData", async (req: Request, res: Response) => {
+
+    const data = await denizenDb.collections.deliveryData.findOne({ ref_email: req.body.user_email });
+    const rating = Number(req.body.ratings)
+    const rate = (rating + data.ratings)/2;
+    var allItems;
+    switch (Math.round(rate)) {
+        case 1:
+
+            allItems = await denizenDb.collections.deliveryData.updateOne({ ref_email: req.body.user_email }, { $set: { no_deliveries: 1 + data.no_deliveries, ratings: 1 } });
+            break;
+        case 2:
+
+            allItems = await denizenDb.collections.deliveryData.updateOne({ ref_email: req.body.user_email }, { $set: { no_deliveries: 1 + data.no_deliveries, ratings: 2 } });
+            break;
+        case 3:
+
+            allItems = await denizenDb.collections.deliveryData.updateOne({ ref_email: req.body.user_email }, { $set: { no_deliveries: 1 + data.no_deliveries, ratings: 3 } });
+            break;
+        case 4:
+
+            allItems = await denizenDb.collections.deliveryData.updateOne({ ref_email: req.body.user_email }, { $set: { no_deliveries: 1 + data.no_deliveries, ratings: 4 } });
+            break;
+        case 5:
+
+            allItems = await denizenDb.collections.deliveryData.updateOne({ ref_email: req.body.user_email }, { $set: { no_deliveries: 1 + data.no_deliveries, ratings: 5 } });
+            break;
+    }
+
+!allItems ?
+    res.status(500).json({ message: "Error while getting user data !" }) :
+    res.status(200).json({ message: "Delivery  data updated  successfully!", data:allItems, flag: true })
+})
+
 
 //cfalgo
 deliveryRouter.get("/cfAlgo", async (req: Request, res: Response) => {
@@ -128,8 +162,8 @@ deliveryRouter.get("/cfAlgo", async (req: Request, res: Response) => {
     }
 
     console.log(similarityMatrix);
-!dataSet ?
-    res.status(500).json({ message: "Error while getting data" }) :
-    res.status(200).json({ message: "found data", Object: similarityMatrix })
+    !dataSet ?
+        res.status(500).json({ message: "Error while getting data" }) :
+        res.status(200).json({ message: "found data", Object: similarityMatrix })
 
 })

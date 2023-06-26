@@ -67,7 +67,7 @@ deliveryRouter.get("/getDeliveryUser", async (req: Request, res: Response) => {
         .toArray();
     !allItems ?
         res.status(500).json({ message: "Error while getting all posted items" }) :
-        res.status(200).json({ message: "All posted items retrived successfully!", itemSet: allItems })
+        res.status(200).json({ message: "All posted items retrived successfully!", userSet: allItems })
 })
 
 //get all delivery users for  delivery data req
@@ -81,7 +81,7 @@ deliveryRouter.put("/getDeliveryData", async (req: Request, res: Response) => {
         res.status(200).json({ message: "user data found  successfully!", del: allItems.no_deliveries, rating: allItems.ratings })
 })
 
-//update delivery data for  delivery users
+//update delivery ratings for  delivery users
 //http://localhost:8080/delData/updateDelData
 deliveryRouter.put("/updateDelData", async (req: Request, res: Response) => {
 
@@ -92,29 +92,41 @@ deliveryRouter.put("/updateDelData", async (req: Request, res: Response) => {
     switch (Math.round(rate)) {
         case 1:
 
-            allItems = await denizenDb.collections.deliveryData.updateOne({ ref_email: req.body.user_email }, { $set: { no_deliveries: 1 + data.no_deliveries, ratings: 1 } });
+            allItems = await denizenDb.collections.deliveryData.updateOne({ ref_email: req.body.user_email }, { $set: {  ratings: 1 } });
             break;
         case 2:
 
-            allItems = await denizenDb.collections.deliveryData.updateOne({ ref_email: req.body.user_email }, { $set: { no_deliveries: 1 + data.no_deliveries, ratings: 2 } });
+            allItems = await denizenDb.collections.deliveryData.updateOne({ ref_email: req.body.user_email }, { $set: {  ratings: 2 } });
             break;
         case 3:
 
-            allItems = await denizenDb.collections.deliveryData.updateOne({ ref_email: req.body.user_email }, { $set: { no_deliveries: 1 + data.no_deliveries, ratings: 3 } });
+            allItems = await denizenDb.collections.deliveryData.updateOne({ ref_email: req.body.user_email }, { $set: {  ratings: 3 } });
             break;
         case 4:
 
-            allItems = await denizenDb.collections.deliveryData.updateOne({ ref_email: req.body.user_email }, { $set: { no_deliveries: 1 + data.no_deliveries, ratings: 4 } });
+            allItems = await denizenDb.collections.deliveryData.updateOne({ ref_email: req.body.user_email }, { $set: {  ratings: 4 } });
             break;
         case 5:
 
-            allItems = await denizenDb.collections.deliveryData.updateOne({ ref_email: req.body.user_email }, { $set: { no_deliveries: 1 + data.no_deliveries, ratings: 5 } });
+            allItems = await denizenDb.collections.deliveryData.updateOne({ ref_email: req.body.user_email }, { $set: {  ratings: 5 } });
             break;
     }
 
 !allItems ?
     res.status(500).json({ message: "Error while getting user data !" }) :
-    res.status(200).json({ message: "Delivery  data updated  successfully!", data:allItems, flag: true })
+    res.status(200).json({ message: "Delivery  rating updated  successfully!", data:allItems, flag: true })
+})
+
+//update delivery data for  delivery users
+//http://localhost:8080/delData/updateDelData
+deliveryRouter.put("/updateDel", async (req: Request, res: Response) => {
+
+    const data = await denizenDb.collections.deliveryData.findOne({ ref_email: req.session.userData.email });
+    const allItems = await denizenDb.collections.deliveryData.updateOne({ ref_email: req.session.userData.email }, { $set: { no_deliveries: 1 + data.no_deliveries } });
+
+    !allItems ?
+        res.status(500).json({ message: "Error while getting user data !" }) :
+        res.status(200).json({ message: "Delivery data updated  successfully!", data: allItems, flag: true })
 })
 
 

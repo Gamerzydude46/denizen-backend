@@ -8,7 +8,6 @@ export const deliveryRouter = Router();
 //create seller doc in seller collection
 //http://localhost:8080/delData/create
 deliveryRouter.post("/create", async (req: Request, res: Response) => {
-     console.log(req.body)
     const deliveryData: DeliveryData = {
         //chnge to session input
         ref_email: req.body.user_email,
@@ -174,7 +173,7 @@ deliveryRouter.get("/cfAlgo", async (req: Request, res: Response) => {
         similarityMatrix.push(row);
     }
 
-    console.log(similarityMatrix);
+    //console.log(similarityMatrix);
     !dataSet ?
         res.status(500).json({ message: "Error while getting data" }) :
         res.status(200).json({ message: "found data", Object: similarityMatrix })

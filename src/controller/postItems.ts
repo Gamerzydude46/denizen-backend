@@ -3,6 +3,7 @@ import PostItems from "../models/postItems";
 import { createItem, checkItemExistence, updateItemDetails, updateUserEmail, updateDeliveryStatus } from "../services/post.services";
 import { denizenDb } from "../services/database.services";
 export const postItemsRouter = Router();
+import nodemailer from 'nodemailer';
 
 
 //create new item collection route
@@ -31,7 +32,7 @@ postItemsRouter.post("/post", async (req: Request, res: Response) => {
         delivered: false,
         special: false,
     }
-    console.log(req.body)
+
     // Check already exist
     var flag = await checkItemExistence(postItems.item_name);
     if (flag === undefined) {
@@ -74,10 +75,34 @@ postItemsRouter.post("/postSpecial", async (req: Request, res: Response) => {
         special: true,
     }
 
+    var email = req.body.user_email;
     // Check already exist
-    var flag = await checkItemExistence(postItems.seller_email);
+    var flag = await checkItemExistence(postItems.item_name);
     if (flag === undefined) {
         const itemCreation = await createItem(postItems);
+        // create reusable transporter object using the default SMTP transport
+        let transporter = nodemailer.createTransport({
+            host: "smtp.gmail.com",
+            port: 465,
+            secure: true,
+            service: 'Gmail',
+
+            auth: {
+                user: "19co22@aitdgoa.edu.in",
+                pass: "aitdgoakk123",
+            }
+        });
+
+            // send mail with defined transport object
+            let info = await transporter.sendMail({
+                from: '"Team Denizen"<process.env.MAIL_USERNAME>', // sender address
+                to: email, // list of receivers
+                subject: "Special Request for Delivery", // Subject line
+                text: "TEAM DENIZEN", // plain text body
+                html: "<h3 style=' text-align: center;font-weight:bold;'>You have a special delivery request from seller</h3>"+postItems.seller_email+"<h2>Kindly chek your Feed for deatils, Order reference Id:<h2/><h1 style='font-weight:bold;text-align: center;'>" + postItems._id + "</h1> <h1 style=' text-align: center'>Thanks, Team Denizen</h1>", // html body
+            });
+
+            console.log("Message sent: %s", info.messageId);
         !itemCreation ?
             res.status(500).json({ message: "Error while uploading new item for special request" }) :
             res.status(200).json({ message: "New Item uploaded  Succesfully for special request !", flag: true })
@@ -131,7 +156,7 @@ postItemsRouter.get("/getMyorders", async (req: Request, res: Response) => {
 //get all items available in collection  route for  Common feed
 //http://localhost:8080/postItems/getItems
 postItemsRouter.get("/getItems", async (req: Request, res: Response) => {
-    const allItems = await denizenDb.collections.postItems.find({ accepted: false  }).toArray();
+    const allItems = await denizenDb.collections.postItems.find({ accepted: false, special:false }).toArray();
     !allItems ?
         res.status(500).json({ message: "Error while getting all posted items" }) :
         res.status(200).json({ message: "All posted items retrived successfully!", itemSet: allItems })
@@ -150,6 +175,7 @@ postItemsRouter.get("/getSpecial", async (req: Request, res: Response) => {
 //http://localhost:8080/postItems/getBname
 postItemsRouter.put("/getBname", async (req: Request, res: Response) => {
     const businessName = await denizenDb.collections.seller.findOne({ ref_email: req.body.ref_email });
+
     !businessName ?
         res.status(500).json({ message: "Error while getting Business name" }) :
         res.status(200).json({

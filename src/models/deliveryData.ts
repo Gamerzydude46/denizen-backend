@@ -29,7 +29,7 @@ export const deliveryDataSchemaValidation = async () => {
                         description: "email from deliveryData collection of type string and is required",
                     },
                     no_deliveries: {
-                        bsonType: "string",
+                        bsonType: "number",
                         description: "ratings is of type string, and is required",
                     },
                     ratings: {

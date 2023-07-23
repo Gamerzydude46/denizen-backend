@@ -213,7 +213,7 @@ userRouter.get("/userData", async (req: Request, res: Response) => {
     
         !userData ?
             res.status(500).json({ message: "Error while getting seller" }) :
-            res.status(200).json({ message: "User located....", data: userData })
+            res.status(200).json({ message: "User lcated....", data: userData })
     }catch(error){
         console.log(error);
         res.status(500).send("Internal Session error Occured !");

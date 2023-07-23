@@ -120,9 +120,10 @@ deliveryRouter.put("/updateDelData", async (req: Request, res: Response) => {
 //http://localhost:8080/delData/updateDelData
 deliveryRouter.put("/updateDel", async (req: Request, res: Response) => {
 
+    console.log(req.body)
     const data = await denizenDb.collections.deliveryData.findOne({ ref_email: req.session.userData.email });
     const allItems = await denizenDb.collections.deliveryData.updateOne({ ref_email: req.session.userData.email }, { $set: { no_deliveries: 1 + data.no_deliveries } });
-
+    
     !allItems ?
         res.status(500).json({ message: "Error while getting user data !" }) :
         res.status(200).json({ message: "Delivery data updated  successfully!", data: allItems, flag: true })

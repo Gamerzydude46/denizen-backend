@@ -88,8 +88,8 @@ postItemsRouter.post("/postSpecial", async (req: Request, res: Response) => {
             service: 'Gmail',
 
             auth: {
-                user: "19co22@aitdgoa.edu.in",
-                pass: "aitdgoakk123",
+                user: "19co58@aitdgoa.edu.in",
+                pass: "Sujay9823",
             }
         });
 
